@@ -124,31 +124,40 @@ void setMaterial(){
 }
 
 
-void setRedMaterial(){
-    const float ambient[4] = {0.2f, 0.0f,0.0f,1.0f};
-    const float diffuse[4] = {1.0f, 0.0f,0.0f,1.0f};
-    const float specular[4] = {1.0f, 0.5f,0.5f,1.0f};
-    const float shininess = 3.0f;
-    
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, &shininess);
-    
+void carbono(float x, float y, float z){
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    setMaterial(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
+    glutSolidSphere(r_carbono, 20, 20);
+    glPopMatrix();
 }
 
-void setShinnyRedMaterial(){
-    const float ambient[4] = {0.2f, 0.0f,0.0f,1.0f};
-    const float diffuse[4] = {1.0f, 0.0f,0.0f,1.0f};
-    const float specular[4] = {1.0f, 0.5f,0.5f,1.0f};
-    const float shininess = 100.0f;
-    
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, &shininess);
-    
+void hidrogeno(float x, float y, float z){
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    setMaterial(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
+    glutSolidSphere(r_carbono, 20, 20);
+    glPopMatrix();
 }
+
+
+void enlace(float x1, float yy1, float z1, float x2, float y2, float z2){
+    glPushMatrix();
+    x2 -= x1;
+    y2 -= yy1;
+    z2 -= z1;
+    glTranslatef((x1+x2)/2, (yy1+y2)/2, (z1+z2)/2);
+    float d = (float)sqrt(x2*x2 + y2*y2 + z2*z2);
+    float angle = (float)acos(z2 / d)*180.0 / M_PI;
+    glScalef(0.5f, 0.5f, 0.5f);
+    glRotatef(-angle, y2, -x2, 0.0f);
+    setMaterial(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
+    glutSolidCube(1.0f);
+    
+    
+    glPopMatrix();
+}
+
 
 // función de gestion de ventana
 void Display(){
@@ -166,11 +175,39 @@ void Display(){
     gluLookAt(x,y,z,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f); // mira al (0,0,0)
     
     // TO DO
-    //setMaterial();
-    //setRedMaterial();
-    setShinnyRedMaterial();
-    glutSolidTeapot(2.0f);
+    double angle = 109.5;
+    double pangle = angle*M_PI / 180.0;
+    float cos_enlace = l_enlace*cos(pangle);
+    float sin_enlace = l_enlace*sin(pangle);
     
+    float x1 = 0.0f;
+    float yy1 = 1.0f*l_enlace;
+    float z1 = 0.0f;
+    
+    float x2 = 0.0f;
+    float y2 = cos_enlace;
+    float z2 = sin_enlace;
+    
+    float x3 = sin_enlace*(float)sin(2 * M_PI / 3);
+    float y3 = cos_enlace;
+    float z3 = sin_enlace*(float)cos(2 * M_PI / 3);
+    
+    float x4 = -sin_enlace*(float)sin(2 * M_PI / 3);
+    float y4 = cos_enlace;
+    float z4 = sin_enlace*(float)cos(2 * M_PI / 3);
+    
+    // carbon en el centro
+    carbono(0.0f, 0.0f, 0.0f);
+    hidrogeno(x1, yy1, z1);
+    hidrogeno(x2, y2, z2);
+    hidrogeno(x3, y3, z3);
+    hidrogeno(x4, y4, z4);
+
+    enlace(0.0f, 0.0f, 0.0f, x1, yy1, z1);
+    enlace(0.0f, 0.0f, 0.0f, x2, y2, z2);
+    enlace(0.0f, 0.0f, 0.0f, x3, y3, z3);
+    enlace(0.0f, 0.0f, 0.0f, x4, y4, z4);
+
     
     
     glFlush(); // actualiza el framebuffer

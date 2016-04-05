@@ -25,6 +25,12 @@ float gl_center = 7.0f; // centro donde pondremos los objetos
 // Espacio para otras variables globales
 double theta = M_PI_2, phi=0.0;
 double radio = 7.0;
+float r_carbono = 1.0f;
+float r_hidrogeno = 0.5;
+float r_enlace = 0.2f;
+float l_enlace = 3.0f;
+
+
 
 // Espacio para la declaración de funciones
 void InitGL();
@@ -34,5 +40,6 @@ void PosicionRaton(int x, int y);
 void RuedaRaton(int key, int x, int y);
 void setLight0();
 void setMaterial();
-void setRedMaterial();
-void setShinnyRedMaterial();
+void carbono(float x, float y, float z);
+void hidrogeno(float x, float y, float z);
+void enlace(float x1, float y1, float z1, float x2, float y2, float z2);
